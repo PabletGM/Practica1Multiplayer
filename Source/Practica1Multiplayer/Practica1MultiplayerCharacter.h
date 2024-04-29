@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "TP_WeaponComponent.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
@@ -43,6 +44,15 @@ class APractica1MultiplayerCharacter : public ACharacter
 	
 public:
 	APractica1MultiplayerCharacter();
+
+	UFUNCTION(Server,Reliable)
+	void Server_Fire();
+
+	UFUNCTION(Server,Reliable)
+	void Multi_Fire();
+
+	UPROPERTY()
+	UTP_WeaponComponent* Weapon = nullptr;
 
 protected:
 	virtual void BeginPlay();

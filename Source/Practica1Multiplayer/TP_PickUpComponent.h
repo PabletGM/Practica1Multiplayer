@@ -22,6 +22,9 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = "Interaction")
 	FOnPickUp OnPickUp;
 
+	UPROPERTY()
+	APractica1MultiplayerCharacter * MyCharacter = nullptr;
+
 	UTP_PickUpComponent();
 protected:
 

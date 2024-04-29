@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "TP_WeaponComponent.h"
 #include "Engine/LocalPlayer.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -39,6 +40,30 @@ APractica1MultiplayerCharacter::APractica1MultiplayerCharacter()
 	//Mesh1P->SetRelativeRotation(FRotator(0.9f, -19.19f, 5.2f));
 	Mesh1P->SetRelativeLocation(FVector(-30.f, 0.f, -150.f));
 
+}
+
+void APractica1MultiplayerCharacter::Server_Fire_Implementation()
+{
+	auto mode = GetNetMode();
+	if(!Weapon)
+		return;
+	Weapon->Fire_SpawnBall();
+	UE_LOG(LogTemp, Log, TEXT("%i"), mode);
+	Multi_Fire();
+}
+
+void APractica1MultiplayerCharacter::Multi_Fire_Implementation()
+{
+	if(!Weapon)
+	{
+		return;
+	}
+	auto role = GetLocalRole();
+	if(role == ENetRole::ROLE_AutonomousProxy || role == ENetRole::ROLE_SimulatedProxy)
+	{
+		Weapon->Fire_Animation();
+		Weapon->Fire_Sound();
+	}
 }
 
 void APractica1MultiplayerCharacter::BeginPlay()

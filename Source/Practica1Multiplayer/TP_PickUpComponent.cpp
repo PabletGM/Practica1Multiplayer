@@ -1,6 +1,7 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "TP_PickUpComponent.h"
+#include "TP_WeaponComponent.h"
 
 UTP_PickUpComponent::UTP_PickUpComponent()
 {
@@ -24,14 +25,16 @@ void UTP_PickUpComponent::OnSphereBeginOverlap(UPrimitiveComponent* OverlappedCo
 	{
 		if(auto *owner =GetOwner())
 		{
-			//auto  mode = owner->GetNetMode();
-			auto  roleLoc = owner->GetLocalRole();
-			//auto  roleRem = owner->GetRemoteRole();
-			if(roleLoc == ENetRole::ROLE_Authority)
+			owner->SetOwner(Character);
+			MyCharacter = Character;
+
+			for(auto*cmp : owner->GetComponents())
 			{
-				owner->SetOwner(Character);
+				if(auto* weapon = Cast<UTP_WeaponComponent>(cmp))
+				{
+					Character->Weapon = weapon;
+				}
 			}
-			// if(roleLoc == ENetMode::)
 		}
 			
 		

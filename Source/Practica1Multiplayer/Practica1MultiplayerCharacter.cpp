@@ -11,6 +11,8 @@
 #include "InputActionValue.h"
 #include "TP_WeaponComponent.h"
 #include "Engine/LocalPlayer.h"
+#include <Net/UnrealNetwork.h>
+
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -42,13 +44,23 @@ APractica1MultiplayerCharacter::APractica1MultiplayerCharacter()
 
 }
 
+void APractica1MultiplayerCharacter::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	DOREPLIFETIME(APractica1MultiplayerCharacter, Weapon);
+}
+
+
 void APractica1MultiplayerCharacter::Server_Fire_Implementation()
 {
 	auto mode = GetNetMode();
 	if(!Weapon)
 		return;
-	Weapon->Fire_SpawnBall();
+	
 	UE_LOG(LogTemp, Log, TEXT("%i"), mode);
+	Weapon->Fire_SpawnBall();
+	
 	Multi_Fire();
 }
 
@@ -59,12 +71,18 @@ void APractica1MultiplayerCharacter::Multi_Fire_Implementation()
 		return;
 	}
 	auto role = GetLocalRole();
+
+	//solo lo hace los clientes
 	if(role == ENetRole::ROLE_AutonomousProxy || role == ENetRole::ROLE_SimulatedProxy)
 	{
 		Weapon->Fire_Animation();
 		Weapon->Fire_Sound();
 	}
 }
+
+
+
+
 
 void APractica1MultiplayerCharacter::BeginPlay()
 {

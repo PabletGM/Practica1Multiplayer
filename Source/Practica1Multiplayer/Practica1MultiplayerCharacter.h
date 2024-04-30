@@ -6,7 +6,9 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+
 #include "Practica1MultiplayerCharacter.generated.h"
+
 
 class UInputComponent;
 class USkeletalMeshComponent;
@@ -48,11 +50,15 @@ public:
 	UFUNCTION(Server,Reliable)
 	void Server_Fire();
 
-	UFUNCTION(Server,Reliable)
+	UFUNCTION(NetMulticast,Reliable)
 	void Multi_Fire();
 
-	UPROPERTY()
+	//se llama automaticamente el GetLife...
+	UPROPERTY(Replicated)
 	UTP_WeaponComponent* Weapon = nullptr;
+
+
+
 
 protected:
 	virtual void BeginPlay();

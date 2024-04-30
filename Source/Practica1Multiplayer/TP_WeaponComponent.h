@@ -60,7 +60,6 @@ public:
 	UFUNCTION(BlueprintCallable,Category ="Weapon")
 	void Fire_Animation();
 
-
 protected:
 	/** Ends gameplay for this component. */
 	UFUNCTION()

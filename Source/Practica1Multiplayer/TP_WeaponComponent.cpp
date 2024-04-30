@@ -33,9 +33,9 @@ void UTP_WeaponComponent::Fire()
 
 	for(auto *cmp: owner->GetComponents())
 	{
-		if(auto* pickUp = Cast<UTP_WeaponComponent>(cmp))
+		if(auto* pickUp = Cast<UTP_PickUpComponent>(cmp))
 		{
-			if(auto *character = pickUp->Character)
+			if(auto *character = pickUp->MyCharacter)
 			{
 				character->Server_Fire();
 			}
@@ -93,7 +93,7 @@ void UTP_WeaponComponent::Fire_Sound()
 
 void UTP_WeaponComponent::Fire_Animation()
 {
-	if(Character ==nullptr || Character->GetController() == nullptr)
+	if(Character ==nullptr)
 	{
 		return;
 	}

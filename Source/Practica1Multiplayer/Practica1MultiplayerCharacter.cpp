@@ -13,6 +13,9 @@
 #include "Engine/LocalPlayer.h"
 #include <Net/UnrealNetwork.h>
 
+#include "Switch.h"
+#include "Kismet/KismetSystemLibrary.h"
+
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -116,6 +119,9 @@ void APractica1MultiplayerCharacter::SetupPlayerInputComponent(UInputComponent* 
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APractica1MultiplayerCharacter::Look);
+
+		// iNTERACT
+		EnhancedInputComponent->BindAction(InteractAction, ETriggerEvent::Triggered, this, &APractica1MultiplayerCharacter::Interact);
 	}
 	else
 	{
@@ -158,4 +164,24 @@ void APractica1MultiplayerCharacter::SetHasRifle(bool bNewHasRifle)
 bool APractica1MultiplayerCharacter::GetHasRifle()
 {
 	return bHasRifle;
+}
+
+void APractica1MultiplayerCharacter::Interact()
+{
+	UE_LOG(LogTemp, Log, TEXT("H"));
+
+	const auto start = FirstPersonCameraComponent->GetComponentLocation();
+	const auto end = start +FirstPersonCameraComponent->GetForwardVector() * 100.f;
+
+	auto hit = FHitResult();
+	UKismetSystemLibrary::SphereTraceSingle(this,start, end,20.f, TraceTypeQuery1, false,{},EDrawDebugTrace::ForDuration, hit,true,FLinearColor::Red, FLinearColor::Green, 5.f);
+
+	if(auto* actor = hit.GetActor())
+	{
+		if(auto *switchActor = Cast<ASwitch>(actor))
+		{
+			switchActor->Toggle();
+		}
+		
+	}
 }

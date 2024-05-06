@@ -6,6 +6,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Interactable.h"
 
 #include "Practica1MultiplayerCharacter.generated.h"
 
@@ -86,6 +87,9 @@ public:
 	bool GetHasRifle();
 
 	void Interact();
+
+	UFUNCTION(Server, Reliable)
+	void Server_Interact(AActor* actor);
 
 protected:
 	/** Called for movement input */

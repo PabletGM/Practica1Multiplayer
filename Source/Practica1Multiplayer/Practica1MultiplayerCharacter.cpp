@@ -178,10 +178,34 @@ void APractica1MultiplayerCharacter::Interact()
 
 	if(auto* actor = hit.GetActor())
 	{
-		if(auto *switchActor = Cast<ASwitch>(actor))
+		if(auto* interface = Cast<IInteractable>(actor))
 		{
-			switchActor->Toggle();
+			if(UKismetSystemLibrary::DoesImplementInterface(actor,UInteractable::StaticClass()))
+			{
+				Server_Interact(actor);
+			}
 		}
 		
 	}
+
+	
 }
+
+void APractica1MultiplayerCharacter::Server_Interact_Implementation(AActor* actor)
+{
+	if(!actor)
+	{
+		return;
+	}
+
+	IInteractable::Execute_Interact(actor);
+	
+	// if(auto* switchActor = Cast<ASwitch>(actor))
+	// {
+	// 	
+	//
+	// 	switchActor->Toggle();
+	// }
+}
+
+

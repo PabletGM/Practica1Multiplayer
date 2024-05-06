@@ -3,6 +3,8 @@
 
 #include "Switch.h"
 
+#include "Components/PointLightComponent.h"
+
 // Sets default values
 ASwitch::ASwitch()
 {
@@ -19,20 +21,34 @@ ASwitch::ASwitch()
 	pivot->SetupAttachment(root);
 
 
-
-
-	
-	
-
+	Light = CreateDefaultSubobject<UPointLightComponent>(TEXT("Lightcmp"));
+	Light->SetupAttachment(root);
 }
 
 void ASwitch::Toggle()
 {
+	Multi_Toggle();
+}
+
+void ASwitch::Multi_Toggle_Implementation()
+{
 	IsOn = !IsOn;
 
-		pivot->SetRelativeRotation(IsOn ? PivotRotationOn : PivotRotationOff);
+	pivot->SetRelativeRotation(IsOn ? PivotRotationOn : PivotRotationOff);
 	
+	Light->SetIntensity(IsOn ? 5000.f : 0.f);
+	Light->SetLightColor(IsOn ? FLinearColor::White : FLinearColor::Black);
 }
+
+
+void ASwitch::Interact_Implementation()
+{
+	IInteractable::Interact_Implementation();
+
+	Toggle();
+}
+
+
 
 // Called when the game starts or when spawned
 void ASwitch::BeginPlay()

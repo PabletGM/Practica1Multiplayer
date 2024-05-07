@@ -32,6 +32,8 @@ class PRACTICA1MULTIPLAYER_API AElevatorSwitch : public AActor, public IInteract
 	float TimePressed = 1.f;
 
 	float Counter = 0.f;
+
+	UPROPERTY(EditDefaultsOnly)FRuntimeFloatCurve AnimationCurve;
 	
 public:	
 

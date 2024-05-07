@@ -25,40 +25,47 @@ void AElevatorSwitch::BeginPlay()
 {
 	Super::BeginPlay();
 
-	auto mode = GetNetMode();
-	//para que no se haga el tick en servidor
-	if(mode == ENetMode::NM_DedicatedServer)
-	{
-		PrimaryActorTick.bCanEverTick = false;
-	}
+	
 }
 
 
 void AElevatorSwitch::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
 
+	if(IsOn)
+	{
+		Counter+=DeltaTime;
+		
+		const auto value = Counter/TimePressed;
+
+		const auto eval = AnimationCurve.ExternalCurve
+			? AnimationCurve.ExternalCurve->GetFloatValue(value)
+			: AnimationCurve.EditorCurveData.Eval(value);
+
+		const auto pos = FMath::Lerp(PivotPositionOff,PivotPositionOn, eval);
+
+		pivot ->SetRelativeLocation(pos);
+	}
 	
 }
 
 void AElevatorSwitch::Interact_Implementation()
 {
-	// IInteractable::Interact_Implementation();
 	Press();
 }
 
 void AElevatorSwitch::Press()
 {
+	if(IsOn)
+		return;
 	auto *world = GetWorld();
 
 	if(!world)
 		return;
 
-
-	//
+	
 	IsOn = true;
-	pivot->SetRelativeLocation(PivotPositionOn);
 	
 	FTimerHandle handle = {};
 	world->GetTimerManager().SetTimer(handle,this, &AElevatorSwitch::Reset,TimePressed,false);
@@ -68,13 +75,17 @@ void AElevatorSwitch::Press()
 void AElevatorSwitch::Reset()
 {
 	IsOn = false;
-	pivot->SetRelativeLocation(PivotPositionOff);
+	Counter=0.f;
 }
 
 void AElevatorSwitch::OnRep_IsOn(bool OldValue)
 {
 
-		PrimaryActorTick.bCanEverTick = IsOn;
+	if(!IsOn)
+	{
+		Reset();
+	}
+		// PrimaryActorTick.bCanEverTick = IsOn;
 	UE_LOG(LogTemp, Log, TEXT("IsOn value: {%hs} Old IsOn value: {%hs}"), IsOn ? "true" : "false", OldValue ? "true" : "false");
 	
 	

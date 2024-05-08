@@ -66,6 +66,9 @@ void AElevatorSwitch::Press()
 
 	
 	IsOn = true;
+
+	//suscribimos al delegate el parametro targetFloor
+	OnElevatorSwitchPressed.Broadcast(TargetFloor);
 	
 	FTimerHandle handle = {};
 	world->GetTimerManager().SetTimer(handle,this, &AElevatorSwitch::Reset,TimePressed,false);
@@ -86,7 +89,7 @@ void AElevatorSwitch::OnRep_IsOn(bool OldValue)
 		Reset();
 	}
 		// PrimaryActorTick.bCanEverTick = IsOn;
-	UE_LOG(LogTemp, Log, TEXT("IsOn value: {%hs} Old IsOn value: {%hs}"), IsOn ? "true" : "false", OldValue ? "true" : "false");
+	//UE_LOG(LogTemp, Log, TEXT("IsOn value: {%hs} Old IsOn value: {%hs}"), IsOn ? "true" : "false", OldValue ? "true" : "false");
 	
 	
 }

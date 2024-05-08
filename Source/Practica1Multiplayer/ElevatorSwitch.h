@@ -4,14 +4,19 @@
 
 #include "CoreMinimal.h"
 #include "Interactable.h"
+#include "BP_MyElevator.h"
 #include "GameFramework/Actor.h"
 #include "ElevatorSwitch.generated.h"
+
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnElevatorSwitchPressed,int, floor);
 
 UCLASS()
 class PRACTICA1MULTIPLAYER_API AElevatorSwitch : public AActor, public IInteractable
 {
 	GENERATED_BODY()
+	
 
+	
 	UPROPERTY(EditAnywhere)
 	USceneComponent *pivot = nullptr;
 
@@ -32,6 +37,9 @@ class PRACTICA1MULTIPLAYER_API AElevatorSwitch : public AActor, public IInteract
 	float TimePressed = 1.f;
 
 	float Counter = 0.f;
+
+	UPROPERTY(EditInstanceOnly)
+	int TargetFloor= 0;
 
 	UPROPERTY(EditDefaultsOnly)FRuntimeFloatCurve AnimationCurve;
 	
@@ -54,5 +62,8 @@ public:
 
 	UFUNCTION()
 	void OnRep_IsOn(bool OldValue);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnElevatorSwitchPressed OnElevatorSwitchPressed = {};
 
 };

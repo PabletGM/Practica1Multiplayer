@@ -7,6 +7,9 @@
 
 #include "BP_MyElevator.generated.h"
 
+
+class ATargetPoint;
+
 UCLASS()
 class PRACTICA1MULTIPLAYER_API ABP_MyElevator : public AActor
 {
@@ -25,7 +28,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Elevator")
 	USceneComponent* ElevatorMesh;
 
-	
+	UPROPERTY()
+	TArray<ATargetPoint*> Floors = {};
+
+	UFUNCTION()
+	void GoToFloor(int32 floor);
 
 public:	
 	// Called every frame

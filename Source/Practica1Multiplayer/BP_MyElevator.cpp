@@ -15,7 +15,7 @@ ABP_MyElevator::ABP_MyElevator()
 	PrimaryActorTick.bCanEverTick = true;
 
 	//have access to the mesh of the elevator
-	ElevatorMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Elevator"));
+	ElevatorMesh = CreateDefaultSubobject<USceneComponent>(TEXT("Elevator"));
 	ElevatorMesh ->SetupAttachment(RootComponent);
 
 
@@ -54,7 +54,11 @@ void ABP_MyElevator::BeginPlay()
 
 void ABP_MyElevator::GoToFloor(int32 floor)
 {
-	UE_LOGFMT(LogTemp, Log, "Go to floor: {0}", floor);
+	if(isMoving)
+	{
+		return;
+	}
+	// UE_LOGFMT(LogTemp, Log, "Go to floor: {0}", floor);
 	
 	//mira si existe la planta en la que estamos
 	if(!Floors.IsValidIndex(floor))
@@ -62,10 +66,22 @@ void ABP_MyElevator::GoToFloor(int32 floor)
 		return;
 	}
 	//cogemos el objeto target targetPoint
-	auto * target = Floors[floor];
+    auto * target = Floors[floor];
+
 	
+	
+	//de donde viene
+	PosFrom = GetActorLocation();
+	//a donde va
+	PosTo= target->GetActorLocation();
+	//reiniciamos contador
+	Counter =0.f;
+	//sacamos duracion = t = espacio /velocidad
+	Duration = (PosTo - PosFrom).Length() /Speed;
+
+	isMoving = true;
 	//ponemos a el elevator la posicion del targetPoint
-	SetActorLocation(target->GetActorLocation());
+	// SetActorLocation(target->GetActorLocation());
 }
 
 // Called every frame
@@ -73,6 +89,26 @@ void ABP_MyElevator::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if(isMoving)
+	{
+		Counter+=DeltaTime;
+		
+		 auto value = Counter/Duration;
+
+		if(value > 1.f)
+		{
+			value = 1.f;
+			isMoving = false;
+		}
+
+		const auto eval = AnimationCurve.ExternalCurve
+			? AnimationCurve.ExternalCurve->GetFloatValue(value)
+			: AnimationCurve.EditorCurveData.Eval(value);
+
+		const auto pos = FMath::Lerp(PosFrom,PosTo, eval);
+
+		SetActorLocation(pos);
+	}
 
 }
 

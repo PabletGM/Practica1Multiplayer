@@ -26,13 +26,33 @@ protected:
 	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Elevator")
-	USceneComponent* ElevatorMesh;
+	USceneComponent* ElevatorMesh {nullptr};
 
-	UPROPERTY()
+	UPROPERTY(EditInstanceOnly)
 	TArray<ATargetPoint*> Floors = {};
 
 	UFUNCTION()
 	void GoToFloor(int32 floor);
+
+	UPROPERTY()
+	FVector PosFrom ={};
+	
+	UPROPERTY()
+	FVector PosTo ={};
+	
+	UPROPERTY()
+	bool isMoving = false;
+	
+	UPROPERTY()
+	float Counter =0;
+	
+	UPROPERTY()
+	float Duration = 0;
+
+	UPROPERTY(EditDefaultsOnly)
+	float Speed= 200;
+
+	UPROPERTY(EditDefaultsOnly)FRuntimeFloatCurve AnimationCurve;
 
 public:	
 	// Called every frame

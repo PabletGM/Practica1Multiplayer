@@ -1,10 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-
 #include "CoreMinimal.h"
 #include "Interactable.h"
-#include "BP_MyElevator.h"
 #include "GameFramework/Actor.h"
 #include "ElevatorSwitch.generated.h"
 
@@ -14,9 +12,6 @@ UCLASS()
 class PRACTICA1MULTIPLAYER_API AElevatorSwitch : public AActor, public IInteractable
 {
 	GENERATED_BODY()
-	
-
-	
 	UPROPERTY(EditAnywhere)
 	USceneComponent *pivot = nullptr;
 
@@ -29,7 +24,7 @@ class PRACTICA1MULTIPLAYER_API AElevatorSwitch : public AActor, public IInteract
 	UPROPERTY(EditDefaultsOnly)
 	FVector PivotPositionOff= {};
 
-	//se llama a funcion al replicar el IsoN
+	//it calls function OnRep_IsOn when replicates
 	UPROPERTY(ReplicatedUsing=OnRep_IsOn)
 	bool IsOn = false;
 
@@ -44,17 +39,13 @@ class PRACTICA1MULTIPLAYER_API AElevatorSwitch : public AActor, public IInteract
 	UPROPERTY(EditDefaultsOnly)FRuntimeFloatCurve AnimationCurve;
 	
 public:	
-
 	AElevatorSwitch();
 
 protected:
-
 	virtual void BeginPlay() override;
 
 public:	
-
 	virtual void Tick(float DeltaTime) override;
-
 	virtual void Interact_Implementation() override;
 
 	void Press();

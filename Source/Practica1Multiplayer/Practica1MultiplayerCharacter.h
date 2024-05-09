@@ -58,7 +58,7 @@ public:
 	UFUNCTION(NetMulticast,Reliable)
 	void Multi_Fire();
 
-	//se llama automaticamente el GetLife...
+	
 	UPROPERTY(Replicated)
 	UTP_WeaponComponent* Weapon = nullptr;
 

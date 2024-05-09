@@ -185,10 +185,7 @@ void APractica1MultiplayerCharacter::Interact()
 				Server_Interact(actor);
 			}
 		}
-		
 	}
-
-	
 }
 
 void APractica1MultiplayerCharacter::Server_Interact_Implementation(AActor* actor)
@@ -199,13 +196,6 @@ void APractica1MultiplayerCharacter::Server_Interact_Implementation(AActor* acto
 	}
 
 	IInteractable::Execute_Interact(actor);
-	
-	// if(auto* switchActor = Cast<ASwitch>(actor))
-	// {
-	// 	
-	//
-	// 	switchActor->Toggle();
-	// }
 }
 
 
